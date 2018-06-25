@@ -1,3 +1,5 @@
+ # softmax线性分类
+
 import sys
 sys.path.append('..')
 
