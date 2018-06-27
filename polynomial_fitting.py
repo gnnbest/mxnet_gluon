@@ -1,4 +1,7 @@
 
+#三阶多项式曲线拟合
+# y = 1.2x - 3.4*power(x,2) + 5.6*power(x,3)
+
 import gluonbook as gb
 from mxnet import autograd, gluon, nd
 from mxnet.gluon import data as gdata, loss as gloss, nn
@@ -8,13 +11,16 @@ n_test = 100
 true_w = [1.2, -3.4, 5.6]
 true_b = 5
 
+# example = [[2],[3],[6]
 features = nd.random.normal(shape = (n_train + n_test, 1))
+# example = [[2,4,8],[3, 9, 27], [6, 36, 216]]
 poly_features = nd.concat(features, nd.power(features, 2), nd.power(features, 3))
 
 labels = true_w[0] * poly_features[:, 0] + true_w[1] * poly_features[:, 1] \
          + true_w[2] * poly_features[:, 2] + true_b
 labels += nd.random.normal(scale=0.1, shape = labels.shape)
 
+# 显示曲线
 from IPython.display import set_matplotlib_formats
 def semilogy(x_vals, y_vals, x_label, y_label, x2_vals=None, y2_vals=None,
              legend=None, figsize=(4.5, 3.5)):
@@ -52,6 +58,7 @@ def fit_and_plot(train_features, test_features, train_labels, test_labels):
             l.backward()
             trainer.step(batch_size)
 
+        #每一次epoch计算一次训练集和测试集的平均loss
         train_ls.append(loss(net(train_features), train_labels).mean().asscalar())
         test_ls.append(loss(net(test_features), test_labels).mean().asscalar())
 
@@ -63,12 +70,13 @@ def fit_and_plot(train_features, test_features, train_labels, test_labels):
 
     return('weight:', net[0].weight.data(), 'bias:', net[0].bias.data())
 
-
+# 三阶多项式拟合训练
 _, w, _, b = fit_and_plot(poly_features[:n_train, :], poly_features[n_train:, :],
              labels[:n_train], labels[n_train:])
 
 print('three_order_weight:', w, 'three_order_bias:', b)
 
+# 一阶多项式拟合训练
 _, w, _, b = fit_and_plot(features[:n_train, :], features[n_train:, :],
              labels[:n_train], labels[n_train:])
 
