@@ -11,7 +11,7 @@ n_test = 100
 true_w = [1.2, -3.4, 5.6]
 true_b = 5
 
-# example = [[2],[3],[6]
+# example = [[2],[3],[6]]
 features = nd.random.normal(shape = (n_train + n_test, 1))
 # example = [[2,4,8],[3, 9, 27], [6, 36, 216]]
 poly_features = nd.concat(features, nd.power(features, 2), nd.power(features, 3))
